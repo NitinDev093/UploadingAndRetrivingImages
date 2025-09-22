@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<!--Inline expression statement. For comment we use @**@-->
+@*<p>Today date is :@DateTime.Now<p/>
+    <p>This year is :@DateTime.Now.Year</p>
+*@
+
+<!--Declaring variable-->
+@*
+    @{
+        string name = "Ntin sahani";
+        var todaytime = DateTime.Now.ToLongTimeString();
+     }
+    <h2>My name is:@name</h2>
+    <h2>Today time is:@todaytime</h2>
+*@
+
+<!--Conditional statement-->
+@*
+    @{
+        int marks = 45;
+    if (marks >= 45) {
+
+
+    <h2>Your grade is: A</h2>
+    }
+    else {
+        <h2>Your grade is B</h2>
+        }
+     }
+*@
+
+<!--Switch statement-->
+@*
+@{
+    string fruit = "banana";
+    switch (fruit)
+    {
+        case "apple":
+            <h2>You have selected apple</h2>
+            break;
+        case "banana":
+            <h2>You have selected banana</h2>
+                break;
+            default:
+            <h2>Wrong fruit</h2>
+            break;
+        }
+    }
+    *@
+
+<!--Loop statement-->
+@*
+    @{ 
+    for (int i = 1; i <=10; i++)
+    {
+        <h2>@i</h2>
+    }
+
+
+}
+
+@{
+    string[] sports = { "Football","Cricket","Hockey","Baseball" };
+    foreach (string item in sports)
+    {
+        <h2>@item</h2>
+    }
+}*@
+
+
+
+
+

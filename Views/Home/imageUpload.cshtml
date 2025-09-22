@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "imageUpload";
+}
+
+<form enctype="multipart/form-data">
+    <label>UserName</label><input type="text" placeholder="User Name" id="txtuserName" /><br><br>
+    <label>UserAge</label><input type="text" placeholder="User Age" id="txtuserAge" /><br><br>
+    <label>UserGender</label><input type="text" placeholder="User Gender" id="txtuserGender" /><br><br>
+    <label>ImageName</label><input type="text" placeholder="Image Name" id="txtimageName" /><br><br>
+    <label>ChooseImage</label><input type="file" id="txtselectImage" /><br><br>
+    <button type="button" onclick="insertuserData()">Submit</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+
+    function insertuserData() {
+
+        var formdata = new FormData();
+        formdata.append("username", $("#txtuserName").val());
+        formdata.append("userage", $("#txtuserAge").val());
+        formdata.append("usergender", $("#txtuserGender").val());
+        formdata.append("imagename", $("#txtimageName").val());
+        formdata.append("imagefile", $("#txtselectImage")[0].files[0]);
+
+        $.ajax({
+            type: "POST",
+            url: '/Home/InsertUserRecordWithImage',
+            data: formdata,
+            contentType: false,
+            processData: false
+        });
+    }
+
+
+</script>
