@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "CreateEmployee";
+}
+
+<div class="form-container">
+    <h2>Create Employee</h2>
+    <form action="/Employee/Create" method="post">
+        <div class="form-group">
+            <label for="FirstName">First Name</label>
+            <input type="text" id="FirstName" name="FirstName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="LastName">Last Name</label>
+            <input type="text" id="LastName" name="LastName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="email" id="Email" name="Email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="PhoneNumber">Phone Number</label>
+            <input type="text" id="PhoneNumber" name="PhoneNumber">
+        </div>
+
+        <div class="form-group">
+            <label for="HireDate">Hire Date</label>
+            <input type="date" id="HireDate" name="HireDate">
+        </div>
+
+        <div class="form-group">
+            <label for="JobTitle">Job Title</label>
+            <input type="text" id="JobTitle" name="JobTitle">
+        </div>
+
+        <div class="form-group">
+            <label for="DepartmentID">Department ID</label>
+            <input type="number" id="DepartmentID" name="DepartmentID">
+        </div>
+
+        <div class="form-group">
+            <label for="Salary">Salary</label>
+            <input type="number" step="0.01" id="Salary" name="Salary">
+        </div>
+
+        <div class="form-group">
+            <label for="ManagerID">Manager ID</label>
+            <input type="number" id="ManagerID" name="ManagerID">
+        </div>
+
+        <button type="submit">Save Employee</button>
+    </form>
+</div>
+
