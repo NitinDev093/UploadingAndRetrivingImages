@@ -51,7 +51,53 @@
             <input type="number" id="ManagerID" name="ManagerID">
         </div>
 
-        <button type="submit">Save Employee</button>
+        <button type="button" onclick="insertuserdata()">Save Employee</button>
     </form>
 </div>
+
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+    function insertuserdata() {
+        var fname = $("#FirstName").val();
+        var lname = $("#LastName").val();
+        var email = $("#Email").val();
+        var phone = $("#PhoneNumber").val();
+        var hiredate = $("#HireDate").val();
+        var jobtitle = $("#JobTitle").val();
+        var departmentid = $("#DepartmentID").val();
+        var salary = $("#Salary").val();
+        var managerid = $("#ManagerID").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/Home/Create',
+            data: {
+                FirstName: fname,
+                LastName: lname,
+                Email: email,
+                PhoneNumber: phone,
+                HireDate: hiredate,
+                JobTitle: jobtitle,
+                DepartmentID: departmentid,
+                Salary: salary,
+                ManagerID: managerid
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (error) {
+                alert("An error occurred while saving the employee.");
+            }
+        });
+    }
+</script>
+
+
+
+
+
 

@@ -132,25 +132,30 @@ namespace Razer_View.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(EmployeeModel employee)
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri(apiBaseUrl); // e.g. "https://localhost:7241/api/"
-
-                var employeePayload = JsonConvert.SerializeObject(employee);
-                var content = new StringContent(employeePayload, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PostAsync("Employee/InsertEmployee", content);
-
-                if (response.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    TempData["Success"] = "Employee inserted successfully!";
-                    return RedirectToAction("Create");
+                    client.BaseAddress = new Uri(apiBaseUrl); // e.g. "https://localhost:7241/api/"
+
+                    var employeePayload = JsonConvert.SerializeObject(employee);
+                    var content = new StringContent(employeePayload, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync("Employee/InsertEmployee", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return Json(new { success = true, message = "Data inserted successfully" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Unable to insert data" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
-                else
-                {
-                    TempData["Error"] = "Failed to insert employee.";
-                    return View(employee);
-                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
