@@ -13,5 +13,6 @@ namespace Razer_View.Models
         public string usergender { get; set; }
         public string imagename { get; set; }
         public HttpPostedFileBase  imagefile { get; set; }
+        public string saveImagePath { get; set; }
     }
 }

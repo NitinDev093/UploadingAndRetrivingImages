@@ -12,8 +12,27 @@
     <button type="button" onclick="insertuserData()">Submit</button>
 </form>
 
+<table id="listonLoad" border="1">
+    <thead>
+        <tr>
+            <th>UserName</th>
+            <th>UserAge</th>
+            <th>UserGender</th>
+            <th>ImageName</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
 <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
+
+    $(document).ready(function () {
+        showUserData();
+    });
 
     function insertuserData() {
 
@@ -34,6 +53,7 @@
                 if (response.success) {
                     alert(response.message);
                     resetuserData();
+                    showUserData();
                 } else {
                     alert(response.message);
                 }
@@ -49,6 +69,30 @@
         $("#txtuserGender").val('');
         $("#txtimageName").val('');
         $("#txtselectImage").val('');
+    }
+
+    function showUserData() {
+        $.ajax({
+            type: "GET",
+            url: '/Home/showUserData',
+            contentType: "application/json;charset=utf-8",
+            success: function (response) {
+                if (response.success) {
+                    $("#listonLoad tbody").empty();
+                    $.each(response.data, function (index, value) {
+                        var row = "<tr>"
+                            + "<td>" + value.username + "</td>"
+                            + "<td>" + value.userage + "</td>"
+                            + "<td>" + value.usergender + "</td>"
+                            + "<td>" + value.imagename + "</td>"
+                            + "<td><img src='" + value.saveImagePath + "' width='50' height='50'/></td>"
+                            + "</tr>";
+                        $("#listonLoad tbody").append(row);
+                    });
+
+                }
+            }
+        });
     }
 
 </script>

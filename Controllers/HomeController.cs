@@ -1,4 +1,5 @@
-﻿using Razer_View.Models;
+﻿using Newtonsoft.Json;
+using Razer_View.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,6 +7,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,6 +18,7 @@ namespace Razer_View.Controllers
     public class HomeController : Controller
     {
         string connectionString = ConfigurationManager.ConnectionStrings["my_connnection"].ConnectionString;
+        readonly string apiBaseUrl = "https://localhost:7176/api/"; // Replace with your actual API base URL
         // GET: Home
         public ActionResult Index()
         {
@@ -46,13 +51,13 @@ namespace Razer_View.Controllers
                         return Json(new { success = "false", message = "Size should be less or equal to 5mb" }, JsonRequestBehavior.AllowGet);
                     }
                     //check directory
-                    string path1=@"E:/UploadedImages";
+                    string path1 = @"E:/UploadedImages/";
                     if (!Directory.Exists(path1))
                     {
                         DirectoryInfo Directory = new DirectoryInfo(path1);
                         Directory.Create();
                     }
-                    //for unique file name
+                    ////for unique file name
                     string filename = Path.GetFileNameWithoutExtension(upload.imagefile.FileName);
                     string finalfilename =filename+"_"+DateTime.Now.ToString("yyyyMMddHHmmss")+fileExtension;//for physical path
                     filepath = Path.Combine(path1, finalfilename);
@@ -85,5 +90,82 @@ namespace Razer_View.Controllers
                 throw ex;
             }
         }
+
+        public ActionResult showUserData()
+        {
+            try
+            {
+                List<ImageUploadModel> list = new List<ImageUploadModel>();
+                using (SqlConnection sqlcon=new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd=new SqlCommand("usp_showUserData", sqlcon);
+                    cmd.CommandType=CommandType.StoredProcedure;
+                    sqlcon.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        ImageUploadModel obj = new ImageUploadModel();
+                        obj.userid = Convert.ToInt32(rdr["userid"]);
+                        obj.username = rdr["username"].ToString();
+                        obj.userage = Convert.ToInt32(rdr["userage"]);
+                        obj.usergender = rdr["usergender"].ToString();
+                        obj.imagename = rdr["imagename"].ToString();
+                        obj.saveImagePath = rdr["imagefile"].ToString();
+                        list.Add(obj);
+                    }
+                    return Json(new { success = true, data = list }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+        //API calling
+        [HttpPost]
+        public async Task<ActionResult> Create(Employee employee)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(apiBaseUrl); // e.g. "https://localhost:7241/api/"
+
+                var employeePayload = JsonConvert.SerializeObject(employee);
+                var content = new StringContent(employeePayload, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync("Employee/InsertEmployee", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Success"] = "Employee inserted successfully!";
+                    return RedirectToAction("Create");
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to insert employee.";
+                    return View(employee);
+                }
+            }
+        }
+
+
+
     }
+
+    public class Employee
+    {
+        public int EmployeeID { get; set; } // Not required for insert
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; }
+        public DateTime HireDate { get; set; }
+        public string JobTitle { get; set; }
+        public int? DepartmentID { get; set; }
+        public decimal Salary { get; set; }
+        public int? ManagerID { get; set; }
+    }
+
 }
