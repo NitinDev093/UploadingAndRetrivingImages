@@ -29,9 +29,26 @@
             url: '/Home/InsertUserRecordWithImage',
             data: formdata,
             contentType: false,
-            processData: false
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    resetuserData();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+                alert("Server error");
+            }
         });
     }
-
+    function resetuserData() {
+        $("#txtuserName").val('');
+        $("#txtuserAge").val('');
+        $("#txtuserGender").val('');
+        $("#txtimageName").val('');
+        $("#txtselectImage").val('');
+    }
 
 </script>
