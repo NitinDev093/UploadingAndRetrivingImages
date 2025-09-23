@@ -79,8 +79,6 @@ namespace Razer_View.Controllers
                         return Json(new { success = "false", message = "Server error" }, JsonRequestBehavior.AllowGet);
                     }
                 }
-                
-
             }
             catch (Exception ex)
             {
