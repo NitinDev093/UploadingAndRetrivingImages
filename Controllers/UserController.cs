@@ -78,5 +78,57 @@ namespace Razer_View.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult> updateUserData(UserModel user)
+        {
+            try
+            {
+                using (var  client=new HttpClient())
+                {
+                    client.BaseAddress = new Uri(baseurl);
+                    string userpayload=JsonConvert.SerializeObject(user);
+                    var content = new StringContent(userpayload, Encoding.UTF8, "application/Json");
+                    HttpResponseMessage response = await client.PutAsync("User/updateUser",content); 
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return Json(new { success = true, message = "Data update Successfull" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "unable to update" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> deleteUser(int Id)
+        {
+            try
+            {
+                using (var client=new HttpClient())
+                {
+                    client.BaseAddress = new Uri(baseurl);
+                    HttpResponseMessage response = await client.DeleteAsync($"User/DeleteUser/{Id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return Json(new { success = true, message = "Data Deleted Successfully" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Unable to delete data" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
